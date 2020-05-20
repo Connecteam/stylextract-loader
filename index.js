@@ -4,7 +4,7 @@
 
 var querystring = require('querystring');
 var path = require('path');
-var crypto = require('crypto');
+var loaderUtils = require('loader-utils'); 
 var fs = require('fs');
 
 module.exports = function(source) {
@@ -20,10 +20,11 @@ module.exports = function(source) {
 // Extract the name of the temp css directory
 // Right now, our query is either: '' or '?tempdir=path'
 function getDirectoryName(context) {
-  var query = context.query.slice(1) || 'tempdir=./csstemp'
+  var options = loaderUtils.getOptions(context)
+  var query = options.queryTempDir || 'tempdir=./csstemp'
 
   return path.join(
-    context.options.output.path,
+    options.output.path,
     querystring.parse(query).tempdir
   )
 }
